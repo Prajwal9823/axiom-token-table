@@ -2,6 +2,12 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/store";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from "@/components/UI/Tooltip";
 
 export default function TableHeader({
   title,
@@ -20,18 +26,36 @@ export default function TableHeader({
 
   function toggle() {
     if (!isActive) {
-      dispatch({ type: "tokens/setSort", payload: { key: sortKey, dir: "desc" } });
+      dispatch({
+        type: "tokens/setSort",
+        payload: { key: sortKey, dir: "desc" },
+      });
     } else {
-      dispatch({ type: "tokens/setSort", payload: { key: sortKey, dir: curDir === "desc" ? "asc" : "desc" } });
+      dispatch({
+        type: "tokens/setSort",
+        payload: { key: sortKey, dir: curDir === "desc" ? "asc" : "desc" },
+      });
     }
   }
 
   return (
-    <th className={`${className} p-3 text-left`}>
-      <button onClick={toggle} className="inline-flex items-center gap-2">
-        <span>{title}</span>
-        <SortIcon active={isActive} dir={curDir} />
-      </button>
+    <th className={`${className} p-2 sm:p-3 text-left`}>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              onClick={toggle}
+              className="inline-flex items-center gap-2 hover:text-white text-gray-300"
+            >
+              <span>{title}</span>
+              <SortIcon active={isActive} dir={curDir} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            Sort by {title.toLowerCase()}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </th>
   );
 }

@@ -1,11 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // 🚀 Disable experimental lightningcss to fix Vercel Linux build error
   experimental: {
-    optimizeCss: false,
-    css: false,
+    optimizeCss: false // Disable lightningcss to avoid binary issues on Vercel
   },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production'
+  }
 };
 
 export default nextConfig;
